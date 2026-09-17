@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "schema": "public",
+  "enums": [
+    { "name": "status", "values": ["active", "inactive"] }
+  ],
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": "nextval('users_id_seq'::regclass)" },
+        { "name": "email", "type": "character varying(100)", "nullable": false, "default": null },
+        { "name": "age", "type": "smallint", "nullable": true, "default": null },
+        { "name": "legacy_notes", "type": "text", "nullable": true, "default": null }
+      ],
+      "primaryKey": { "name": "users_pkey", "columns": ["id"] },
+      "uniques": [{ "name": "users_email_key", "columns": ["email"] }],
+      "foreignKeys": [],
+      "indexes": [
+        { "name": "users_age_idx", "definition": "CREATE INDEX users_age_idx ON public.users USING btree (age)" }
+      ]
+    },
+    {
+      "name": "posts",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": "nextval('posts_id_seq'::regclass)" },
+        { "name": "user_id", "type": "integer", "nullable": false, "default": null },
+        { "name": "title", "type": "text", "nullable": false, "default": null }
+      ],
+      "primaryKey": { "name": "posts_pkey", "columns": ["id"] },
+      "uniques": [],
+      "foreignKeys": [
+        {
+          "name": "posts_user_id_fkey",
+          "columns": ["user_id"],
+          "refTable": "users",
+          "refColumns": ["id"],
+          "onUpdate": "NO ACTION",
+          "onDelete": "CASCADE"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "legacy_audit",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": null },
+        { "name": "payload", "type": "text", "nullable": true, "default": null }
+      ],
+      "primaryKey": { "name": "legacy_audit_pkey", "columns": ["id"] },
+      "uniques": [],
+      "foreignKeys": [],
+      "indexes": []
+    }
+  ]
+}

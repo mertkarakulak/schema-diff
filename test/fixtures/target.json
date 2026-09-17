@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "schema": "public",
+  "enums": [
+    { "name": "status", "values": ["active", "inactive", "archived"] },
+    { "name": "role", "values": ["admin", "member"] }
+  ],
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": "nextval('users_id_seq'::regclass)" },
+        { "name": "email", "type": "character varying(255)", "nullable": false, "default": null },
+        { "name": "age", "type": "integer", "nullable": true, "default": null },
+        { "name": "bio", "type": "text", "nullable": true, "default": null },
+        { "name": "role", "type": "role", "nullable": false, "default": "'member'::role" }
+      ],
+      "primaryKey": { "name": "users_pkey", "columns": ["id"] },
+      "uniques": [{ "name": "users_email_key", "columns": ["email"] }],
+      "foreignKeys": [],
+      "indexes": [
+        { "name": "users_email_lower_idx", "definition": "CREATE INDEX users_email_lower_idx ON public.users USING btree (lower((email)::text))" }
+      ]
+    },
+    {
+      "name": "posts",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": "nextval('posts_id_seq'::regclass)" },
+        { "name": "user_id", "type": "integer", "nullable": false, "default": null },
+        { "name": "title", "type": "character varying(200)", "nullable": false, "default": null },
+        { "name": "published", "type": "boolean", "nullable": false, "default": "false" }
+      ],
+      "primaryKey": { "name": "posts_pkey", "columns": ["id"] },
+      "uniques": [],
+      "foreignKeys": [
+        {
+          "name": "posts_user_id_fkey",
+          "columns": ["user_id"],
+          "refTable": "users",
+          "refColumns": ["id"],
+          "onUpdate": "NO ACTION",
+          "onDelete": "CASCADE"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "comments",
+      "columns": [
+        { "name": "id", "type": "integer", "nullable": false, "default": "nextval('comments_id_seq'::regclass)" },
+        { "name": "post_id", "type": "integer", "nullable": false, "default": null },
+        { "name": "body", "type": "text", "nullable": false, "default": null }
+      ],
+      "primaryKey": { "name": "comments_pkey", "columns": ["id"] },
+      "uniques": [],
+      "foreignKeys": [
+        {
+          "name": "comments_post_id_fkey",
+          "columns": ["post_id"],
+          "refTable": "posts",
+          "refColumns": ["id"],
+          "onUpdate": "NO ACTION",
+          "onDelete": "CASCADE"
+        }
+      ],
+      "indexes": [
+        { "name": "comments_post_id_idx", "definition": "CREATE INDEX comments_post_id_idx ON public.comments USING btree (post_id)" }
+      ]
+    }
+  ]
+}
