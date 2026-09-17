@@ -1,0 +1,60 @@
+{
+  "name": "@mertkarakulak/schema-diff",
+  "version": "0.1.0",
+  "description": "Compare two PostgreSQL schemas and generate a reversible migration (up.sql + down.sql).",
+  "type": "module",
+  "bin": {
+    "schema-diff": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "postgres",
+    "postgresql",
+    "schema",
+    "diff",
+    "migration",
+    "database",
+    "ddl",
+    "cli"
+  ],
+  "author": "Mert Karakulak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mertkarakulak/schema-diff.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mertkarakulak/schema-diff/issues"
+  },
+  "homepage": "https://github.com/mertkarakulak/schema-diff#readme",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.5",
+    "@types/pg": "^8.11.10",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
